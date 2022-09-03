@@ -244,3 +244,11 @@ services:
 
 ```
 
+# Docker linked-network configuration
+
+```bash
+docker network create --driver=bridge --subnet=172.20.0.0/24 linkednetwork
+```
+```bash
+docker network connect --ip 172.20.0.X linkednetwork <container-name>
+```
