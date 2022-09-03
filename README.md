@@ -145,7 +145,7 @@ services:
 ## [Filebrowser](https://hub.docker.com/r/filebrowser/filebrowser)
 - **Docker-run**
 ```docker
-docker run -d --restart unless-stopped --name filebrowser -v /home/arpan:/srv -v /home/arpan/docker-containers/filebrowser:/database -e PUID=$(id -u) -e PGID=$(id -g) -p 8080:80 filebrowser/filebrowser:s6
+docker run -d --restart unless-stopped --name filebrowser -v /home/arpan:/srv -v /home/arpan/docker-containers/filebrowser/database:/database -v /home/arpan/docker-containers/filebrowser/config:/config -e PUID=$(id -u) -e PGID=$(id -g) -p 8080:80 filebrowser/filebrowser:s6
 ```
 - **Docker-compose**
 ```docker
@@ -156,7 +156,8 @@ services:
         container_name: filebrowser
         volumes:
             - '/home/arpan:/srv'
-            - '/home/arpan/docker-containers/filebrowser:/database'
+            - '/home/arpan/docker-containers/filebrowser/database:/database'
+            - '/home/arpan/docker-containers/filebrowser/config:/config'
         environment:
             - PUID=1000
             - PGID=1000
