@@ -185,7 +185,7 @@ services:
       - 8200:8200
     restart: unless-stopped                                                       
 ```
-## [qBittorrent]([https://hub.docker.com/r/filebrowser/filebrowser](https://hotio.dev/containers/qbittorrent/))
+## [qBittorrent](https://hotio.dev/containers/qbittorrent/)
 - **Docker-compose**
 ```docker
 version: "2.1"
