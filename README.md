@@ -253,3 +253,9 @@ docker network create --driver=bridge --subnet=172.20.0.0/24 linkednetwork
 ```bash
 docker network connect --ip 172.20.0.X linkednetwork <container-name>
 ```
+
+# Update specific docker container(s) using watchtower
+
+```bash
+docker run --name watchtower-temp --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --cleanup --run-once <container-name>
+```
