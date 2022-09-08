@@ -245,6 +245,97 @@ services:
 
 ```
 
+## [Heimdall](https://hub.docker.com/r/linuxserver/heimdall)
+- **Docker-run**
+```docker
+docker run --name=heimdall --restart unless-stopped -d -v /home/arpan/docker-containers/heimdall:/config -e PGID=1000 -e PUID=1000 -p 5555:80 linuxserver/heimdall
+```
+- **Docker-compose**
+```docker
+version: '3.3'
+services:
+    heimdall:
+        container_name: heimdall
+        restart: unless-stopped
+        volumes:
+            - '/home/arpan/docker-containers/heimdall:/config'
+        environment:
+            - PGID=1000
+            - PUID=1000
+        ports:
+            - '5555:80'
+        image: linuxserver/heimdall
+```
+
+## [Syncthing](https://hub.docker.com/r/linuxserver/syncthing)
+- **Docker-compose**
+```docker
+---
+version: "2.1"
+services:
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    hostname: syncthing
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=India/Kolkata
+    volumes:
+      - /home/arpan/docker-containers/syncthing:/config
+      - /home/arpan/DATA/syncthing-data/share:/data1
+    ports:
+      - 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped 
+```
+
+## [Apache2](https://hub.docker.com/r/ubuntu/apache2)
+- **Docker-run**
+```docker
+docker run -d --name apache2 --restart unless-stopped -v /home/arpan/docker-containers/apache2/website:/var/www/html -e TZ=India/Kolkata -p 8844:80 ubuntu/apache2
+```
+- **Docker-compose**
+```docker
+version: '3.3'
+services:
+    apache2:
+        container_name: apache2
+        restart: unless-stopped
+        volumes:
+            - '/home/arpan/docker-containers/apache2/website:/var/www/html'
+        environment:
+            - TZ=India/Kolkata
+        ports:
+            - '8844:80'
+        image: ubuntu/apache2
+```
+
+## [Pyload](https://hub.docker.com/r/linuxserver/pyload)
+- **Docker-run**
+```docker
+docker run -d --name=pyload -p 8000:8000 -e PUID=1000 -e PGID=1000 -v /home/arpan/docker-containers/pyload:/config -v/home/arpan/DATA/pyload_downloads:/downloads --restart unless-stopped lscr.io/linuxserver/pyload
+```
+- **Docker-compose**
+```docker
+version: '3.3'
+services:
+    linuxserver:
+        container_name: pyload
+        ports:
+            - '8000:8000'
+        environment:
+            - PUID=1000
+            - PGID=1000
+        volumes:
+            - '/home/arpan/docker-containers/pyload:/config'
+            - '/home/arpan/DATA/pyload_downloads:/downloads'
+        restart: unless-stopped
+        image: lscr.io/linuxserver/pyload
+```
+
 # Docker linked-network configuration
 
 ```bash
