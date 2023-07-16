@@ -1,6 +1,71 @@
 ﻿
 # Docker containers configuration
 
+## Common Stack
+```docker
+version: '3.3'
+services:
+    filebrowser:
+        restart: unless-stopped
+        container_name: filebrowser
+        volumes:
+            - '/home/arpan:/srv'
+            - '/home/arpan/docker-containers/filebrowser/database:/database'
+            - '/home/arpan/docker-containers/filebrowser/config:/config'
+        environment:
+            - PUID=1000
+            - PGID=1000
+        ports:
+            - '8080:80'
+        networks:
+            commonnetwork:
+                ipv4_address: 172.20.0.5
+
+        image: 'filebrowser/filebrowser:s6'
+    navidrome:
+        restart: unless-stopped
+        volumes:
+            - '/home/arpan/docker-containers/navidrome:/data'
+            - '/home/arpan/Music:/music:ro'
+        ports:
+            - '4533:4533'
+        networks:
+            commonnetwork:
+                ipv4_address: 172.20.0.4
+        container_name: navidrome
+        image: 'deluan/navidrome:latest'
+    grafana:
+        restart: unless-stopped
+        volumes:
+            - '/home/arpan/docker-containers/grafana:/var/lib/grafana'
+        ports:
+            - '3000:3000'
+        networks:
+            commonnetwork:
+                ipv4_address: 172.20.0.3
+        container_name: grafana
+        image: 'grafana/grafana:latest'
+    influxdb:
+        restart: unless-stopped
+        container_name: influxdb
+        ports:
+            - '8086:8086'
+        networks:
+            commonnetwork:
+                ipv4_address: 172.20.0.2
+        volumes:
+            - '/home/arpan/docker-containers/influxdb:/var/lib/influxdb'
+            - '/home/arpan/docker-containers/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf'
+        image: 'influxdb:1.8'
+networks:
+  commonnetwork:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.20.0.0/24
+         gateway: 172.20.0.1
+```
+
 ## [Uptime-kuma](https://github.com/louislam/uptime-kuma)
 - **Docker-run**
 ```docker
