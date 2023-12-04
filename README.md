@@ -144,6 +144,37 @@ services:
             - '8083:8080'
         image: 'amir20/dozzle:latest'
 ```
+## [Pihole](https://github.com/pi-hole/pi-hole)
+- **Docker-compose**
+```docker
+version: "3"
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      #- "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      - "8081:80/tcp"
+    dns:
+      - '127.0.0.1'
+      - '1.1.1.1'
+    environment:
+      TZ: 'America/Toronto'
+      WEBPASSWORD: 'password_here'
+      FTLCONF_LOCAL_IPV4: '127.0.0.1'
+    # Volumes store your data between container upgrades
+    volumes:
+      - '/home/arpan/docker-containers/pihole/etc-pihole:/etc/pihole'
+      - '/home/arpan/docker-containers/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    #cap_add:
+     # - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
+```
 ## [Influxdb](https://hub.docker.com/_/influxdb/tags?page=1&name=1.8)
 - **Pre-configure**
 ```docker
