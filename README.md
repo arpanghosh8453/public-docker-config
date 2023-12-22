@@ -6,25 +6,21 @@
 version: '3.3'
 services:
     filebrowser:
-        restart: 'unless-stopped'
         container_name: 'filebrowser'
-        volumes:
-            - '/home/arpan:/srv'
-            - '/home/arpan/docker-containers/filebrowser/database:/database'
-            - '/home/arpan/docker-containers/filebrowser/config:/config'
-            - type: bind
-              source: '/home/arpan/docker-containers/filebrowser/config/filebrowser.log'
-              target: '/config/filebrowser.log'
-        environment:
-            - PUID=1000
-            - PGID=1000
+        image: hurlenko/filebrowser
+        user: "1000:1000"
         #ports:
-        #    - '8080:80'
+        #- 8080:80
+        volumes:
+        - /home/arpan:/data
+        - /media/arpan/ARPAN-WD-STORAGE:/data/ARPAN-WD-STORAGE
+        - /home/arpan/docker-containers/filebrowser/database:/config
+        environment:
+        - FB_BASEURL=/filebrowser
+        restart: 'unless-stopped'
         networks:
             commonnetwork:
                 ipv4_address: 172.20.0.5
-
-        image: 'filebrowser/filebrowser:s6'
     navidrome:
         restart: 'unless-stopped'
         volumes:
@@ -43,12 +39,13 @@ services:
             - '/home/arpan/docker-containers/grafana:/var/lib/grafana'
         #ports:
         #    - '3000:3000'
+        #environment:
+        #    - 'GF_SERVER_ROOT_URL=https://health-stat.arpanghosh.com/'
         networks:
             commonnetwork:
                 ipv4_address: 172.20.0.3
         container_name: grafana
         image: 'grafana/grafana:latest'
-        user: "$UID:$GID"
     influxdb:
         restart: 'unless-stopped'
         container_name: 'influxdb'
@@ -104,6 +101,15 @@ services:
         networks:
             commonnetwork:
                 ipv4_address: 172.20.0.7
+    fitbit-ui:
+        image: 'thisisarpanghosh/fitbit-report-app:latest'
+        container_name: 'fitbit-report-app'
+        #ports:
+        #    - "5000:80"
+        restart: unless-stopped
+        networks:
+            commonnetwork:
+                ipv4_address: 172.20.0.8
         
 networks:
   commonnetwork:
